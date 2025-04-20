@@ -1,0 +1,56 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(MaterialApp(home: DisplayPage()));
+
+class DisplayPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Restaurant')),
+      body: Center(
+        child: Image.network('https://via.placeholder.com/300x200?text=Restaurant+Image'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (_) => MenuPage()));
+        },
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+class MenuPage extends StatelessWidget {
+  Widget foodItem(String name, String price) {
+    return Card(
+      margin: EdgeInsets.all(10),
+      child: Row(
+        children: [
+          Image.network('https://via.placeholder.com/80', width: 80, height: 80),
+          SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(name, style: TextStyle(fontSize: 16)),
+              Text('Price: $price'),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Menu')),
+      body: ListView(
+        children: [
+          foodItem('Burger', '\$5'),
+          foodItem('Pizza', '\$8'),
+          foodItem('Pasta', '\$6'),
+        ],
+      ),
+    );
+  }
+}
