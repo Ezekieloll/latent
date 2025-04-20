@@ -1,0 +1,81 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(home: CalculatorApp());
+  }
+}
+
+class CalculatorApp extends StatefulWidget {
+  @override
+  _CalculatorAppState createState() => _CalculatorAppState();
+}
+
+class _CalculatorAppState extends State<CalculatorApp> {
+  String display = '';
+
+  void buttonPressed(String value) {
+    setState(() {
+      if (value == 'C') {
+        display = '';
+      } else if (value == '=') {
+        try {
+          display = display.replaceAll('×', '*').replaceAll('÷', '/');
+          display = '${double.parse(display)}';
+        } catch (e) {
+          display = 'Error';
+        }
+      } else {
+        display += value;
+      }
+    });
+  }
+
+  Widget buildButton(String text) {
+    return ElevatedButton(
+      onPressed: () => buttonPressed(text),
+      child: Text(text, style: TextStyle(fontSize: 24)),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<String> buttons = [
+      'C', '=', '-', '+',
+      '*', '/', '0', '1',
+      '2', '3', '4', '5',
+      '6', '7', '8', '9',
+    ];
+
+    return Scaffold(
+      appBar: AppBar(title: Text('Calculator')),
+      body: Column(
+        children: [
+          Expanded(
+            child: Container(
+              alignment: Alignment.bottomRight,
+              padding: EdgeInsets.all(20),
+              child: Text(display, style: TextStyle(fontSize: 32)),
+            ),
+          ),
+          GridView.builder(
+            padding: EdgeInsets.all(10),
+            shrinkWrap: true,
+            itemCount: buttons.length,
+            gridDelegate:
+              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: EdgeInsets.all(5),
+                child: buildButton(buttons[index]),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
