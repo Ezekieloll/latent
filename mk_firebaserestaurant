@@ -1,0 +1,92 @@
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Table Booking',
+      home: BookingForm(),
+    );
+  }
+}
+
+class BookingForm extends StatefulWidget {
+  @override
+  _BookingFormState createState() => _BookingFormState();
+}
+
+class _BookingFormState extends State<BookingForm> {
+  final _formKey = GlobalKey<FormState>();
+  String name = '';
+  String phone = '';
+  String date = '';
+  String time = '';
+
+  void submitBooking() async {
+    if (_formKey.currentState!.validate()) {
+      await FirebaseFirestore.instance.collection('bookings').add({
+        'name': name,
+        'phone': phone,
+        'date': date,
+        'time': time,
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Booking Successful!')),
+      );
+
+      _formKey.currentState!.reset();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Restaurant Table Booking")),
+      body: Padding(
+        padding: EdgeInsets.all(16),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                decoration: InputDecoration(labelText: "Name"),
+                onChanged: (value) => name = value,
+                validator: (value) => value!.isEmpty ? "Enter name" : null,
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: "Phone"),
+                keyboardType: TextInputType.phone,
+                onChanged: (value) => phone = value,
+                validator: (value) => value!.isEmpty ? "Enter phone" : null,
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: "Date"),
+                onChanged: (value) => date = value,
+                validator: (value) => value!.isEmpty ? "Enter date" : null,
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: "Time"),
+                onChanged: (value) => time = value,
+                validator: (value) => value!.isEmpty ? "Enter time" : null,
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: submitBooking,
+                child: Text("Book Table"),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
