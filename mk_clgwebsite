@@ -1,0 +1,83 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'College Website',
+      debugShowCheckedModeBanner: false,
+      home: CollegeHomePage(),
+    );
+  }
+}
+
+class CollegeHomePage extends StatelessWidget {
+  final List<String> tabs = [
+    "About Us",
+    "Academics",
+    "Library",
+    "Placements",
+    "Admissions"
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Row(
+          children: [
+            FlutterLogo(), // College logo
+            SizedBox(width: 10),
+            Text('My College'),
+          ],
+        ),
+        actions: tabs
+            .map((tab) => TextButton(
+                  onPressed: () {},
+                  child: Text(tab, style: TextStyle(color: Colors.white)),
+                ))
+            .toList(),
+      ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '📢 Announcements',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue),
+                  ),
+                  SizedBox(height: 10),
+                  Card(
+                    child: Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                          'Admissions are open for the 2025 academic year. Apply now!'),
+                    ),
+                  ),
+                  Card(
+                    child: Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                          'Upcoming placement drive by top MNCs next month.'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
