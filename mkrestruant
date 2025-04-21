@@ -54,3 +54,6 @@ class MenuPage extends StatelessWidget {
     );
   }
 }
+
+  cloud_firestore: ^4.8.5 # or latest
+  firebase_core: ^2.27.0
